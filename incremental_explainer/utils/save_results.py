@@ -8,7 +8,6 @@ def save_results(car_number: int, start_frame: int, end_frame:int, insertion_mov
         'start_frame': start_frame,
         'frames_number': end_frame,
         'insertion_move': insertion_move,
-        'insertion_exp': insertion_exp,
            }
     
     
