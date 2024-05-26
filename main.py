@@ -13,15 +13,16 @@ def track_saliency_maps_with_video(frame_number, car_set_object, box_index):
     save_results(car_set_object, frame_number, len(frames), auc_results, aux_results_2)
 
 def main(car_number, frame_number):
-    model = YOLO("yolov8n.pt")
-    image_location = f"datasets/car/car-{car_number}/img/{str(frame_number).zfill(8)}.jpg"
-    img = cv2.imread(image_location)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    results = model(img, verbose=False)
-    number_objects = len(results[0].boxes.cls)
-    print(f"Number of objects: {number_objects}")
-    for i in range(number_objects):
-        track_saliency_maps_with_video(frame_number, car_number, i)
+    for j in range(100):
+        model = YOLO("yolov8n.pt")
+        image_location = f"datasets/car/car-{car_number}/img/{str(frame_number+j).zfill(8)}.jpg"
+        img = cv2.imread(image_location)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        results = model(img, verbose=False)
+        number_objects = len(results[0].boxes.cls)
+        print(f"Number of objects: {number_objects}")
+        for i in range(number_objects):
+            track_saliency_maps_with_video(frame_number, car_number, i)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process some integers.')
