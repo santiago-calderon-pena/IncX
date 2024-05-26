@@ -185,12 +185,12 @@ def track_saliency_maps(frame_number, car_number, box_index_first_frame):
         img = cv2.imread(image_location)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         results = model(img, verbose=False)
-        if (first_id == -1):
-            plt.imshow(results[0].plot())
-            plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
-            plt.axis('off')
-            plt.tight_layout()
-            plt.show()
+        #if (first_id == -1):
+            # plt.imshow(results[0].plot())
+            # plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+            # plt.axis('off')
+            # plt.tight_layout()
+            # plt.show()
         detections, frame, confidence_dict = plot_boxes(results, img, np.empty((0,5)), model)
         _, classes = detections
         if len(results[0].boxes.cls) <= box_index_first_frame:
@@ -259,28 +259,29 @@ def track_saliency_maps(frame_number, car_number, box_index_first_frame):
                 light_blue,
                 thickness=3,
             )
-        res = compute_saliency_maps(results, image_location, model)
-        print(matching_index, box_index_first_frame, len(results[0].boxes.cls), len(res))
-        exp_2 = res[matching_index]["detection"][0].numpy()
+        # res = compute_saliency_maps(results, image_location, model)
+        # print(matching_index, box_index_first_frame, len(results[0].boxes.cls), len(res))
+        # exp_2 = res[matching_index]["detection"][0].numpy()
     
-        viridis_frame = plt.cm.viridis(exp_2)
-        viridis_frame_rgb = viridis_frame[:, :, :3]  # Extract RGB channels
-        alpha = 0.5  # You can adjust the alpha value as needed
-        dst2 = cv2.addWeighted(
-                img_boxes, alpha, (viridis_frame_rgb * 255).astype(np.uint8), 1 - alpha, 0
-            )
-        min_expl_2, _ = compute_explanation(original, class_id, exp_2, -1, model)
-        print(dst2.shape, dst.shape)
-        final_frame = cv2.hconcat([dst, min_expl, dst2, min_expl_2])
+        # viridis_frame = plt.cm.viridis(exp_2)
+        # viridis_frame_rgb = viridis_frame[:, :, :3]  # Extract RGB channels
+        # alpha = 0.5  # You can adjust the alpha value as needed
+        # dst2 = cv2.addWeighted(
+        #         img_boxes, alpha, (viridis_frame_rgb * 255).astype(np.uint8), 1 - alpha, 0
+        #     )
+        # min_expl_2, _ = compute_explanation(original, class_id, exp_2, -1, model)
+        # print(dst2.shape, dst.shape)
+        final_frame = cv2.hconcat([dst, min_expl])
 
         frames.append(final_frame)
         frame_number += 1
         
         results = compute_insertion(model = model, saliency_map=exp, image=original, class_index=class_id)
-        results_2 = compute_insertion(model = model, saliency_map=exp_2, image=original, class_index=class_id)
+        # results_2 = compute_insertion(model = model, saliency_map=exp_2, image=original, class_index=class_id)
         auc_results.append(results)
-        auc_results_2.append(results_2)
+        #auc_results_2.append(results_2)
         print(f"AUC: {results}")
-        print(f"AUC_2: {results_2}")
+        print(f'Frame number: {frame_number}')
+        #print(f"AUC_2: {results_2}")
         
     return frames, auc_results, auc_results_2
