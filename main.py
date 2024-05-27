@@ -5,6 +5,8 @@ from incremental_explainer.tracking import track_saliency_maps
 from incremental_explainer.utils.save_results import save_results
 from ultralytics import YOLO
 import cv2
+import pandas as pd
+import pickle
 
 def track_saliency_maps_with_video(frame_number, car_set_object, box_index):
     print(f"Frame number: {frame_number}, Car number: {car_set_object}, Explanation index: {box_index}")
@@ -21,7 +23,13 @@ def track_saliency_maps_with_video(frame_number, car_set_object, box_index):
 def main(car_number, frame_number):
     for j in range(100):
         model = YOLO("yolov8n.pt")
+        with open('results.pkl', 'rb') as f:
+            data = pickle.load(f)
+        df = pd.DataFrame(data)
         new_frame_number = frame_number + j
+        while not df.loc[(df['car_number'] == car_number) & (df['start_frame'] == new_frame_number)].empty:
+            frame_number += 1
+            new_frame_number = frame_number + j
         image_location = f"datasets/car/car-{car_number}/img/{str(new_frame_number).zfill(8)}.jpg"
         print(f"Processing image: {image_location}")
         img = cv2.imread(image_location)
