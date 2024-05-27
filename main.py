@@ -10,7 +10,13 @@ def track_saliency_maps_with_video(frame_number, car_set_object, box_index):
     print(f"Frame number: {frame_number}, Car number: {car_set_object}, Explanation index: {box_index}")
     frames, auc_results, aux_results_2 = track_saliency_maps(frame_number=frame_number, car_number=car_set_object, box_index_first_frame=box_index)
     print(f"Number of frames: {len(frames)}")
-    save_results(car_set_object, frame_number, len(frames), auc_results, aux_results_2)
+    save_results(
+        car_number=car_set_object,
+        start_frame=frame_number,
+        frames_number=len(frames),
+        object_index=box_index,
+        insertion_move=auc_results
+    )
 
 def main(car_number, frame_number):
     for j in range(100):

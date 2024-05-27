@@ -2,12 +2,13 @@ import pickle
 import os
 
 PICKLE_FILE = 'results.pkl'
-def save_results(car_number: int, start_frame: int, end_frame:int, insertion_move: list[int], insertion_exp: list[int]):
+def save_results(car_number: int, start_frame: int, frames_number:int, object_index:int, insertion_move: list[int]):
     row = {
         'car_number': car_number,
         'start_frame': start_frame,
-        'frames_number': end_frame,
+        'frames_number': frames_number,
         'insertion_move': insertion_move,
+        'object_index': object_index,
            }
     
     
