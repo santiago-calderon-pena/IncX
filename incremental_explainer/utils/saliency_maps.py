@@ -7,7 +7,7 @@ def compute_saliency_maps(results, image_location, model):
     # print(results)
     number = 0
     while (len(results[0].boxes.cls) != number): # Check assumption that it sometimes cannot find the same number of objects
-        results_drise = dr.get_drise_saliency_map(nummasks=100, imagelocation=image_location, model= PytorchYoloV8Wrapper(model), savename="anything", numclasses=80, max_figures=2, maskres=(2,2))
+        results_drise = dr.get_drise_saliency_map(nummasks=5000, imagelocation=image_location, model= PytorchYoloV8Wrapper(model), savename="anything", numclasses=80, max_figures=2, maskres=(16,16))
         number = len(results_drise)
     # print("Number of objects found in expl: ", number)
     # print("Number of objects found in bounding box: ", len(results[0].boxes.cls))
