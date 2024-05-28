@@ -1,5 +1,5 @@
 # CPUs limit is roughly 380 (Estimation)
-for i in {1..20}
+for (( i=1; i<=20; i+=1 ))
 do
     for (( j=1; j<=2500; j+=50 ))
     do
