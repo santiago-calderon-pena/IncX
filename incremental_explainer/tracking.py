@@ -7,7 +7,7 @@ import cv2
 
 import cv2
 import matplotlib.pyplot as plt
-from incremental_explainer.metrics.metrics import compute_insertion
+from incremental_explainer.metrics.insertion import compute_insertion
 from incremental_explainer.transformations.image_scaling import scale_image
 from incremental_explainer.transformations.image_moving import move_image
 from incremental_explainer.explanations import compute_explanation
