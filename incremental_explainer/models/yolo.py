@@ -3,9 +3,11 @@ from vision_explanation_methods.explanations import common as od_common
 import numpy as np
 import torch
 
+from ultralytics import YOLO
+
 import numpy as np
 
-class PytorchYoloV8Wrapper(od_common.GeneralObjectDetectionModelWrapper):
+class Yolo(od_common.GeneralObjectDetectionModelWrapper):
     """Wraps a PytorchFasterRCNN model with a predict API function for object detection.
 
     To be compatible with the drise explainability method, all models must be wrapped to have
@@ -14,11 +16,11 @@ class PytorchYoloV8Wrapper(od_common.GeneralObjectDetectionModelWrapper):
     also be used with the RetinaNet or any other models with the same output class.
     """
     
-    def __init__(self, model):
-        self._model = model
+    def __init__(self):
+        self._model = YOLO("yolov10n.pt")
         self._number_of_classes = 80
 
-    def predict(self, x: torch.Tensor):
+    def predict(self, x: torch.tensor):
         """Creates a list of detection records from the image predictions.
         """
         raw_detections = []
@@ -29,11 +31,6 @@ class PytorchYoloV8Wrapper(od_common.GeneralObjectDetectionModelWrapper):
         
         detections = [] 
         for raw_detection in raw_detections:
-            #raw_detection = apply_nms(raw_detection,0.005)
-            
-            # Note that FasterRCNN doesn't return a score for each class, only the predicted class
-            # DRISE requires a score for each class. We approximate the score for each class
-            # by dividing the (1.0 - class score) evenly among the other classes.
             detections.append(
                 od_common.DetectionRecord(
                     bounding_boxes=raw_detection[0].boxes.xyxy,
