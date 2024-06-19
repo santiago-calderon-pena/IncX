@@ -7,7 +7,7 @@ import cv2
 
 import cv2
 import matplotlib.pyplot as plt
-from incremental_explainer.metrics.insertion import compute_insertion
+from incremental_explainer.metrics.insertion import compute_insertion_old
 from incremental_explainer.transformations.image_scaling import scale_image
 from incremental_explainer.transformations.image_moving import move_image
 from incremental_explainer.explanations import compute_explanation
@@ -275,8 +275,8 @@ def track_saliency_maps(frame_number, car_number, box_index_first_frame):
 
         frames.append(final_frame)
         frame_number += 1
-        
-        results = compute_insertion(model = model, saliency_map=exp, image=original, class_index=class_id)
+        ## TODO: Use compute_insertion_array and remove compute_insertion
+        results = compute_insertion_old(model = model, saliency_map=exp, image=original, class_index=class_id)
         # results_2 = compute_insertion(model = model, saliency_map=exp_2, image=original, class_index=class_id)
         auc_results.append(results)
         #auc_results_2.append(results_2)
