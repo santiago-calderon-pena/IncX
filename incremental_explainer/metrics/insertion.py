@@ -58,7 +58,7 @@ def compute_insertion(model: od_common.GeneralObjectDetectionModelWrapper, salie
             threshold = maximum + (sub_index / divisions) * (minimum - maximum)
             pixels = np.where(saliency_map >= threshold)
             masks[pixels[0], pixels[1], :] = True
-            div = len(pixels[0]) / (im_size)
+            div = len(np.where(masks)[0]) / (im_size)
             divisions_list_in.append(
                 div
             )
