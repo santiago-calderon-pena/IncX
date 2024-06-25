@@ -7,7 +7,7 @@ import torchvision.transforms as transforms
 from vision_explanation_methods.explanations import common as od_common
 
     
-def compute_explanation_size(model: od_common.GeneralObjectDetectionModelWrapper, saliency_map, image, class_index, bounding_box, divisions=100, verbose = False):
+def compute_explanation_proportion(model: od_common.GeneralObjectDetectionModelWrapper, saliency_map, image, class_index, bounding_box, divisions=100, verbose = False):
         import matplotlib as mpl
         mpl.rcParams["savefig.pad_inches"] = 0
         masks = np.empty([saliency_map.shape[0], saliency_map.shape[1], 3])
@@ -29,11 +29,11 @@ def compute_explanation_size(model: od_common.GeneralObjectDetectionModelWrapper
             divisions_list_in.append(
                 div
             )
-            min_expl = np.where(masks, image, 0)
+            suf_expl = np.where(masks, image, 0)
             transform = transforms.Compose([
                 transforms.ToTensor()
             ])
-            img_t = transform(min_expl)
+            img_t = transform(suf_expl)
             detection = model.predict([img_t])            
             arrays = []
             
@@ -49,8 +49,8 @@ def compute_explanation_size(model: od_common.GeneralObjectDetectionModelWrapper
             if (max_confidence > 0.5):
                 if verbose:
                     plt.title(f'Size percentage {div}')
-                    plt.imshow(min_expl)
+                    plt.imshow(suf_expl)
                     plt.show()
-                return div
+                return div, suf_expl
 
         return -1
