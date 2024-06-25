@@ -70,10 +70,10 @@ def compute_insertion(model: od_common.GeneralObjectDetectionModelWrapper, salie
             detection = model.predict([img_t])            
             arrays = []
             
-            for i, _ in enumerate(detection[0].bounding_boxes.detach()):
-                index = np.argmax(detection[0].class_scores[i].detach())
+            for i, _ in enumerate(detection[0].bounding_boxes.cpu().detach()):
+                index = np.argmax(detection[0].class_scores[i].cpu().detach())
                 if index == class_index:
-                    arrays.append((detection[0].class_scores[i][index].detach(), detection[0].bounding_boxes[i].detach()))
+                    arrays.append((detection[0].class_scores[i][index].cpu().detach(), detection[0].bounding_boxes[i].cpu().detach()))
             if len(arrays) > 0:
                 max_confidence = max([el[0] * calculate_intersection_over_union(bounding_box, el[1]) for el in arrays])
             else:
