@@ -25,7 +25,7 @@ class Yolo(od_common.GeneralObjectDetectionModelWrapper):
         """
         raw_detections = []
         for x_el in x:
-            input  = (np.ascontiguousarray(np.transpose(x_el.numpy(), (1, 2, 0))) * 255).astype('uint8')
+            input  = (np.ascontiguousarray(np.transpose(x_el.cpu().numpy(), (1, 2, 0))) * 255).astype('uint8')
             raw_detection = self._model.predict(input, verbose = False)
             raw_detections.append(raw_detection)
         
