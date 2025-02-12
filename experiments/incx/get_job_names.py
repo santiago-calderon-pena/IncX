@@ -1,14 +1,17 @@
+import os
+import joblib
 from incx.models.model_enum import ModelEnum
 from incx.explainers.explainer_enum import ExplainerEnum
-import joblib
-
+from datasets.dataset_enum import DatasetEnum
 
 def main():
+    directory = "./datasets/"
     combinations_array = []
-    for explainer_name in ExplainerEnum:
-        for model_name in ModelEnum:
-            for image_index in range(1, 11):
-                combinations_array.append((model_name, explainer_name, image_index))
+    for dataset in DatasetEnum:
+        for explainer_name in ExplainerEnum:
+            for model_name in ModelEnum:
+                for dir in os.listdir(directory + dataset.name + "/"):
+                    combinations_array.append((dataset, model_name, explainer_name, dir))
 
     joblib.dump(combinations_array, "jobs.pkl")
 
