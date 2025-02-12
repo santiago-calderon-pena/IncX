@@ -42,7 +42,7 @@ def main():
         load_dotenv()
         
         INCX_RESULTS_FOLDER_PATH = os.environ.get("INCX_RESULTS_FOLDER_PATH")
-        dataset, model_name, explainer_name, k = job[0]
+        dataset, model_name, explainer_name, k = job
 
         valid = False
         initial_im = 1
