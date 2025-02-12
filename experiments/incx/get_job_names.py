@@ -2,6 +2,8 @@ import os
 import joblib
 from incx.models.model_enum import ModelEnum
 from incx.explainers.explainer_enum import ExplainerEnum
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from datasets.dataset_enum import DatasetEnum
 
 def main():

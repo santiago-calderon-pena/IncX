@@ -63,9 +63,9 @@ def main():
         
         print(f"Processing {file_location}")
         print(f"Current index: {current_index}, model: {model_name}, video index: {video_index}, image index: {image_index}")
-        
-        image_path = f"../../datasets/LASOT/{video_index}/{str(image_index).zfill(8)}.jpg"
-
+        print(video_index, image_index)
+        image_path = f"../../datasets/KITTI/{str(video_index).zfill(4)}/{str(image_index).zfill(6)}.png"
+        print(image_path)
         model = ModelFactory().get_model(ModelEnum[model_name])
         img = cv2.imread(image_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
