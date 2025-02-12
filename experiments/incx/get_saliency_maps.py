@@ -52,8 +52,8 @@ def main():
         incRex = IncX(model, explainer, object_indices=[0])
         while not valid:
             image_locations = [
-                f"../../datasets/{dataset.name}/{k}/{image_number}.jpg"
-                for image_number in os.listdir(f"../../datasets/{dataset.name}/{k}")
+                f"./datasets/{dataset.name}/{k}/{image_name}"
+                for image_name in os.listdir(f"./datasets/{dataset.name}/{k}")
             ]
 
             images = [
