@@ -19,7 +19,8 @@ import os
 import pickle
 import joblib
 import random
-
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 def main():
     jobs_file_lock = "jobs.lock"
@@ -41,9 +42,7 @@ def main():
         load_dotenv()
         
         INCX_RESULTS_FOLDER_PATH = os.environ.get("INCX_RESULTS_FOLDER_PATH")
-        explainer_name = job[1]
-        model_name = job[0]
-        k = job[2]
+        dataset, model_name, explainer_name, k = job[0]
 
         valid = False
         initial_im = 1
@@ -53,8 +52,8 @@ def main():
         incRex = IncX(model, explainer, object_indices=[0])
         while not valid:
             image_locations = [
-                f"../../datasets/LASOT/{k}/{str(i).zfill(8)}.jpg"
-                for i in range(initial_im, 301)
+                f"../../datasets/{dataset.name}/{k}/{image_number}.jpg"
+                for image_number in os.listdir(f"../../datasets/{dataset.name}/{k}")
             ]
 
             images = [
@@ -93,7 +92,7 @@ def main():
             }
             file_name = f"{image_location.split('/')[-1].split('.')[0]}.pkl"
             
-            file_path = f"{INCX_RESULTS_FOLDER_PATH}/{explainer_name.name}/{model_name.name}/{image_location.split('/')[-3]}/{image_location.split('/')[-2]}/"
+            file_path = f"{INCX_RESULTS_FOLDER_PATH}/{dataset.name}/{explainer_name.name}/{model_name.name}/{image_location.split('/')[-3]}/{image_location.split('/')[-2]}/"
             full_path = os.path.join(file_path, file_name)
 
             # Create the directory if it does not exist
