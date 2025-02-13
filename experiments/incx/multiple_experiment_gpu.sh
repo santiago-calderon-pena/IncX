@@ -1,5 +1,5 @@
 for (( j=1; j<=8; j++ ))
 do
-    sbatch batch_experiment_gpu.sh
+    sbatch experiments/incx/batch_experiment_gpu.sh
 done
 

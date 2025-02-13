@@ -3,5 +3,5 @@
 #SBATCH --ntasks=1
 #SBATCH --job-name=incremental_baseline_gpu
 #SBATCH --gres=gpu
-#SBATCH -p nmes_gpu
-python get_saliency_maps.py
+#SBATCH -p biomed_a100_gpu
+python experiments/incx/get_saliency_maps.py
