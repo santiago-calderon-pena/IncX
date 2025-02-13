@@ -30,12 +30,12 @@ def main():
     
     incx_results_list = find_files(INCX_RESULTS_FOLDER_PATH)
     incx_results_list = [
-        '/'.join(name.replace('\\', '/').split('/')[-5:]) 
+        '/'.join(name.replace('\\', '/').split('/')[-6:]) 
         for name in incx_results_list
     ]
     d_rise_results_list = find_files(D_RISE_RESULTS_FOLDER_PATH)
     d_rise_results_list = [
-        '/'.join(name.replace('\\', '/').split('/')[-5:]) 
+        '/'.join(name.replace('\\', '/').split('/')[-6:]) 
         for name in d_rise_results_list
     ]
     
@@ -57,16 +57,20 @@ def main():
         current_index = incx_file["detection"]["current_index"]
         
         file_location = file_location.replace("\\", "/")
-        model_name = file_location.split("/")[-4]
+        dataset_name = file_location.split("/")[-5]
+        explainer_name = file_location.split("/")[-4]
+        model_name = file_location.split("/")[-3]
         video_index = file_location.split("/")[-2]
-        image_index = int(file_location.split("/")[-1].split(".")[0])
+        image_name = int(file_location.split("/")[-1].split(".")[0])
         
         print(f"Processing {file_location}")
-        print(f"Current index: {current_index}, model: {model_name}, video index: {video_index}, image index: {image_index}")
-        print(video_index, image_index)
-        image_path = f"../../datasets/KITTI/{str(video_index).zfill(4)}/{str(image_index).zfill(6)}.png"
+        print(f"Current index: {current_index}, explainer: {explainer_name}, dataset: {dataset_name}, model: {model_name}, video index: {video_index}, image index: {image_name}")
+        print(video_index, image_name)
+        image_path = f"../../datasets/{dataset_name}/{video_index}/{image_name}"
         print(image_path)
         model = ModelFactory().get_model(ModelEnum[model_name])
+        
+        image_path = image_path + '.png' if os.path.exists(image_path + '.png') else image_path + '.jpg'
         img = cv2.imread(image_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         transform = transforms.Compose([transforms.ToTensor()])
@@ -101,10 +105,9 @@ def main():
             },
             "maps": {"saliency_map": saliency_map, "mask": mask},
         }
-        file_name = f"{image_path.split('/')[-1].split('.')[0]}.pkl"
             
-        file_path = f"{D_RISE_RESULTS_FOLDER_PATH}/D_RISE/{model_name}/{image_path.split('/')[-3]}/{image_path.split('/')[-2]}/"
-        full_path = os.path.join(file_path, file_name)
+        file_path = f"{D_RISE_RESULTS_FOLDER_PATH}/{dataset_name}/{explainer_name}/{model_name}/{video_index}/"
+        full_path = os.path.join(file_path, {image_name}.pkl)
 
         os.makedirs(file_path, exist_ok=True)
         
