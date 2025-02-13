@@ -35,7 +35,7 @@ def main():
             joblib.dump(jobs, "jobs.pkl")
 
         def resize_image(image_path):
-            pil_image = Image.open(image_path)
+            pil_image = Image.open(image_path).convert("RGB")
             image_array = np.array(pil_image)
             return image_array
 
@@ -47,16 +47,18 @@ def main():
         print(model_name.name, dataset.name, k)
         model = ModelFactory().get_model(model_name)
         explainer = DRise(model, 1000)
-        incRex = IncX(model, explainer, object_indices=[0])
+        incRex = IncX(model, explainer, object_indices=[0], timeout=20)
         image_locations = [
             f"./datasets/{dataset.name}/{k}/{image_name}"
             for image_name in os.listdir(f"./datasets/{dataset.name}/{k}")
         ]
-
+        image_locations.sort()
         transform = transforms.Compose([transforms.ToTensor()])
         images = [
             resize_image(image_location) for image_location in image_locations
         ]
+        print(image_locations[0])
+        score = 0
         while images:
             img_t = transform(images[0])
             results = model.predict([img_t])
@@ -66,9 +68,10 @@ def main():
                 break
             images.pop()
             image_locations.pop()
-        print(f"Processing video {k}, score: {score:.2f}")
+        print(f"Processing video {k}, score: {score:.2f}, N images: {len(images)}")
 
         for image, image_location in zip(images, image_locations):
+            print(image_location)
             time_start = time.time()
             results, _ = incRex.explain_frame(image)
             explanation_time = time.time() - time_start
