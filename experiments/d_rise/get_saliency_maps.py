@@ -109,7 +109,7 @@ def main():
         }
             
         file_path = f"{D_RISE_RESULTS_FOLDER_PATH}/{dataset_name}/{explainer_name}/{model_name}/{video_index}/"
-        full_path = os.path.join(file_path, {image_name}.pkl)
+        full_path = os.path.join(file_path, f"{image_name}.pkl")
 
         os.makedirs(file_path, exist_ok=True)
         
