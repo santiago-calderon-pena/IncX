@@ -84,9 +84,7 @@ def main():
         results = model.predict([img_t])
         explainer = ExplainerFactory(model).get_explainer(ExplainerEnum.D_RISE)
         start_time = time.time()
-        saliency_maps = explainer.create_saliency_map(
-            np.array(Image.open(image_path))
-        )
+        saliency_maps = explainer.create_saliency_map(img)
         class_index = np.argmax(results[0].class_scores[current_index].detach())
         bounding_box = np.array(
             results[0].bounding_boxes[current_index].cpu().detach()
