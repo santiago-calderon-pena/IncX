@@ -46,8 +46,13 @@ def main():
     incx_not_d_rise = list(incx_not_d_rise)
     
     incx_not_d_rise = [INCX_RESULTS_FOLDER_PATH + el for el in incx_not_d_rise]
-    print(f"INCX not D_RISE: {incx_not_d_rise}")
+    print(f"INCX not D_RISE: {len(incx_not_d_rise)}")
     random.shuffle(incx_not_d_rise)
+    
+    def read_image(image_path):
+        pil_image = Image.open(image_path).convert("RGB")
+        image_array = np.array(pil_image)
+        return image_array
 
     while len(incx_not_d_rise) > 0:
         file_location = incx_not_d_rise.pop(0)
@@ -66,13 +71,12 @@ def main():
         print(f"Processing {file_location}")
         print(f"Current index: {current_index}, explainer: {explainer_name}, dataset: {dataset_name}, model: {model_name}, video index: {video_index}, image index: {image_name}")
         print(video_index, image_name)
-        image_path = f"../../datasets/{dataset_name}/{video_index}/{image_name}"
+        image_path = f"./datasets/{dataset_name}/{video_index}/{image_name}"
         print(image_path)
         model = ModelFactory().get_model(ModelEnum[model_name])
         
         image_path = image_path + '.png' if os.path.exists(image_path + '.png') else image_path + '.jpg'
-        img = cv2.imread(image_path)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = read_image(image_path)
         transform = transforms.Compose([transforms.ToTensor()])
         img_t = transform(img)
 
