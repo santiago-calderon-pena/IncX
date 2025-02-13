@@ -44,34 +44,31 @@ def main():
         INCX_RESULTS_FOLDER_PATH = os.environ.get("INCX_RESULTS_FOLDER_PATH")
         dataset, model_name, explainer_name, k = job
 
-        valid = False
-        initial_im = 1
-        print(model_name.name)
+        print(model_name.name, dataset.name, k)
         model = ModelFactory().get_model(model_name)
         explainer = DRise(model, 1000)
         incRex = IncX(model, explainer, object_indices=[0])
-        while not valid:
-            image_locations = [
-                f"./datasets/{dataset.name}/{k}/{image_name}"
-                for image_name in os.listdir(f"./datasets/{dataset.name}/{k}")
-            ]
+        image_locations = [
+            f"./datasets/{dataset.name}/{k}/{image_name}"
+            for image_name in os.listdir(f"./datasets/{dataset.name}/{k}")
+        ]
 
-            images = [
-                resize_image(image_location) for image_location in image_locations
-            ]
-            transform = transforms.Compose([transforms.ToTensor()])
+        transform = transforms.Compose([transforms.ToTensor()])
+        images = [
+            resize_image(image_location) for image_location in image_locations
+        ]
+        while images:
             img_t = transform(images[0])
             results = model.predict([img_t])
             if len(results[0].class_scores) > 0:
-                valid = True
                 class_index = np.argmax(results[0].class_scores[0])
                 score = results[0].class_scores[0][class_index]
-            else:
-                initial_im += 1
+                break
+            images.pop()
+            image_locations.pop()
         print(f"Processing video {k}, score: {score:.2f}")
 
-        for i, image in enumerate(images):
-            image_location = image_locations[i]
+        for image, image_location in zip(images, image_locations):
             time_start = time.time()
             results, _ = incRex.explain_frame(image)
             explanation_time = time.time() - time_start
@@ -92,7 +89,7 @@ def main():
             }
             file_name = f"{image_location.split('/')[-1].split('.')[0]}.pkl"
             
-            file_path = f"{INCX_RESULTS_FOLDER_PATH}/{dataset.name}/{explainer_name.name}/{model_name.name}/{image_location.split('/')[-3]}/{image_location.split('/')[-2]}/"
+            file_path = f"{INCX_RESULTS_FOLDER_PATH}/{dataset.name}/{explainer_name.name}/{model_name.name}/{image_location.split('/')[-2]}/"
             full_path = os.path.join(file_path, file_name)
 
             # Create the directory if it does not exist
