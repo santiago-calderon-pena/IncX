@@ -66,7 +66,7 @@ def main():
         explainer_name = file_location.split("/")[-4]
         model_name = file_location.split("/")[-3]
         video_index = file_location.split("/")[-2]
-        image_name = int(file_location.split("/")[-1].split(".")[0])
+        image_name = file_location.split("/")[-1].split(".")[0]
         
         print(f"Processing {file_location}")
         print(f"Current index: {current_index}, explainer: {explainer_name}, dataset: {dataset_name}, model: {model_name}, video index: {video_index}, image index: {image_name}")
