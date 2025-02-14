@@ -17,6 +17,9 @@ def find_files(directory="."):
             file_list.append(file_path)
     return file_list
 
+def default_float_dict():
+    return defaultdict(float)
+
 def main():
     load_dotenv()
     INCX_RESULTS_FOLDER_PATH = os.environ.get("INCX_RESULTS_FOLDER_PATH")
@@ -32,26 +35,27 @@ def main():
 
     joblib.dump(blob_names, "blob_names_metrics.pkl")
 
+    
     results = {
         "D-RISE": {
             dataset.name:{
                 model.name: {
-                    "Insertion": defaultdict(lambda: defaultdict(float)),
-                    "Deletion": defaultdict(lambda: defaultdict(float)),
-                    "EPG": defaultdict(lambda: defaultdict(float)),
-                    "Explanation Proportion": defaultdict(lambda: defaultdict(float)),
-                    "Time": defaultdict(lambda: defaultdict(float)),
+                    "Insertion": defaultdict(default_float_dict),
+                    "Deletion": defaultdict(default_float_dict),
+                    "EPG": defaultdict(default_float_dict),
+                    "Explanation Proportion": defaultdict(default_float_dict),
+                    "Time": defaultdict(default_float_dict),
                 } for model in ModelEnum
             } for dataset in DatasetEnum
         },
         "Incx": {
             dataset.name:{
                 model.name: {
-                    "Insertion": defaultdict(lambda: defaultdict(float)),
-                    "Deletion": defaultdict(lambda: defaultdict(float)),
-                    "EPG": defaultdict(lambda: defaultdict(float)),
-                    "Explanation Proportion": defaultdict(lambda: defaultdict(float)),
-                    "Time": defaultdict(lambda: defaultdict(float)),
+                    "Insertion": defaultdict(default_float_dict),
+                    "Deletion": defaultdict(default_float_dict),
+                    "EPG": defaultdict(default_float_dict),
+                    "Explanation Proportion": defaultdict(default_float_dict),
+                    "Time": defaultdict(default_float_dict),
                 } for model in ModelEnum
             } for dataset in DatasetEnum
         },
