@@ -55,7 +55,7 @@ def main():
         image_path = f"datasets/{dataset_name}/{video_number}/{image_name}"
         print(image_path)
         image_path = image_path + ".png" if os.path.exists(image_path + ".png") else image_path + ".jpg"
-        image = np.array(Image.open(image_path))
+        image = np.array(Image.open(image_path).convert("RGB"))
         bounding_box = dict_drise["detection"]["bounding_box"]
 
         if class_index > 80:
