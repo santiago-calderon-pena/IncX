@@ -18,7 +18,9 @@ from incx.metrics.comparison.saliency_maps.structural_similarity_index import (
     compute_structural_similarity_index,
 )
 from IPython.display import clear_output
-
+from collections import defaultdict
+def default_float_dict():
+    return defaultdict(float)
 
 def main():
     # Load environment variables
@@ -76,21 +78,21 @@ def main():
         num_blobs += 1
 
         # Update results
-        frame_number = int(blob_name.split("/")[-1].split(".")[0]) - 1
-        image_number = int(blob_name.split("/")[-2]) - 1
-
+        frame_name = blob_name.split("/")[-1].split(".")[0]
+        video_number = blob_name.split("/")[-2]
+        print(f"Frame: {frame_name}, Video: {video_number}")
         with lock_comparison:
             comparison_results = joblib.load("comparison_results.pkl")
-            comparison_results[dataset_name][model_name]["Pearson"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Pearson"][video_number][frame_name] = (
                 pearson_coeff
             )
-            comparison_results[dataset_name][model_name]["Structural"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Structural"][video_number][frame_name] = (
                 structural_similarity_index
             )
-            comparison_results[dataset_name][model_name]["Dice"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Dice"][video_number][frame_name] = (
                 dice_coefficient
             )
-            comparison_results[dataset_name][model_name]["Jaccard"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Jaccard"][video_number][frame_name] = (
                 jaccard_index
             )
             joblib.dump(comparison_results, "comparison_results.pkl")

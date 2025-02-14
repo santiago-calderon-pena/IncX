@@ -6,6 +6,7 @@ from incx.models.model_enum import ModelEnum
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from datasets.dataset_enum import DatasetEnum
+from collections import defaultdict
 
 def find_files(directory="."):
     file_list = []
@@ -14,6 +15,9 @@ def find_files(directory="."):
             file_path = os.path.join(root, file)
             file_list.append(file_path)
     return file_list
+
+def default_float_dict():
+    return defaultdict(float)
 
 def main():
     load_dotenv()
@@ -35,11 +39,11 @@ def main():
     results = {
         dataset.name:{
             model.name: {
-                "Pearson": np.zeros((10, 300)),
-                "Structural": np.zeros((10, 300)),
-                "Scanpath": np.zeros((10, 300)),
-                "Dice": np.zeros((10, 300)),
-                "Jaccard": np.zeros((10, 300)),
+                "Pearson": defaultdict(default_float_dict),
+                "Structural": defaultdict(default_float_dict),
+                "Scanpath": defaultdict(default_float_dict),
+                "Dice": defaultdict(default_float_dict),
+                "Jaccard": defaultdict(default_float_dict),
             } for model in ModelEnum
         } for dataset in DatasetEnum
     }
