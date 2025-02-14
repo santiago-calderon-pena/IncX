@@ -49,8 +49,9 @@ def main():
 
         # Download and load blob data for INCX
         dict_incx = joblib.load(INCX_RESULTS_FOLDER_PATH +'/'+blob_name)
-        model_name = blob_name.split("/")[1]
-
+        model_name = blob_name.split("/")[2]
+        dataset_name = blob_name.split("/")[1]
+        print(f"Model: {model_name}, Dataset: {dataset_name}")
         # Download and load blob data for DRISE
         dict_drise = joblib.load(D_RISE_RESULTS_FOLDER_PATH +'/'+blob_name)
 
@@ -80,16 +81,16 @@ def main():
 
         with lock_comparison:
             comparison_results = joblib.load("comparison_results.pkl")
-            comparison_results[model_name]["Pearson"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Pearson"][image_number][frame_number] = (
                 pearson_coeff
             )
-            comparison_results[model_name]["Structural"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Structural"][image_number][frame_number] = (
                 structural_similarity_index
             )
-            comparison_results[model_name]["Dice"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Dice"][image_number][frame_number] = (
                 dice_coefficient
             )
-            comparison_results[model_name]["Jaccard"][image_number][frame_number] = (
+            comparison_results[dataset_name][model_name]["Jaccard"][image_number][frame_number] = (
                 jaccard_index
             )
             joblib.dump(comparison_results, "comparison_results.pkl")

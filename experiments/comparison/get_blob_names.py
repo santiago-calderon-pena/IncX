@@ -1,9 +1,11 @@
 import os
 import random
 import joblib
-from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 from incx.models.model_enum import ModelEnum
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+from datasets.dataset_enum import DatasetEnum
 
 def find_files(directory="."):
     file_list = []
@@ -31,27 +33,15 @@ def main():
     import numpy as np
 
     results = {
-        ModelEnum.YOLO.name: {
-            "Pearson": np.zeros((10, 300)),
-            "Structural": np.zeros((10, 300)),
-            "Scanpath": np.zeros((10, 300)),
-            "Dice": np.zeros((10, 300)),
-            "Jaccard": np.zeros((10, 300)),
-        },
-        ModelEnum.RT_DETR.name: {
-            "Pearson": np.zeros((10, 300)),
-            "Structural": np.zeros((10, 300)),
-            "Scanpath": np.zeros((10, 300)),
-            "Dice": np.zeros((10, 300)),
-            "Jaccard": np.zeros((10, 300)),
-        },
-        ModelEnum.FASTER_RCNN.name: {
-            "Pearson": np.zeros((10, 300)),
-            "Structural": np.zeros((10, 300)),
-            "Scanpath": np.zeros((10, 300)),
-            "Dice": np.zeros((10, 300)),
-            "Jaccard": np.zeros((10, 300)),
-        },
+    dataset.name:{
+            model.name: {
+                "Pearson": np.zeros((10, 300)),
+                "Structural": np.zeros((10, 300)),
+                "Scanpath": np.zeros((10, 300)),
+                "Dice": np.zeros((10, 300)),
+                "Jaccard": np.zeros((10, 300)),
+            } for model in ModelEnum
+        } for dataset in DatasetEnum
     }
     joblib.dump(results, "comparison_results.pkl")
 
