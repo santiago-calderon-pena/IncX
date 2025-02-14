@@ -52,7 +52,6 @@ def main():
         saliency_map_drise = dict_drise["maps"]["saliency_map"]
         model_enum_el = ModelEnum[model_name]
         model = model_factory.get_model(model_enum_el)
-        frame_number = int(blob_name.split("/")[-1].split(".")[0])
         image_path = f"datasets/{dataset_name}/{video_number}/{image_name}"
         print(image_path)
         image_path = image_path + ".png" if os.path.exists(image_path + ".png") else image_path + ".jpg"
@@ -111,38 +110,38 @@ def main():
         exp_proportion_drise = compute_explanation_proportion(mask_drise)
         exp_proportion_incx = compute_explanation_proportion(mask_incx)
 
-        frame_number -= 1
-        image_number = int(blob_name.split("/")[-2]) - 1
+        frame_name = blob_name.split("/")[-1].split(".")[0]
+        video_number = blob_name.split("/")[-2]
         with lock_comparison:
             metrics_results = joblib.load("metrics_results.pkl")
-            metrics_results["D-RISE"][dataset_name][model_name]["Insertion"][image_number][
-                frame_number
+            metrics_results["D-RISE"][dataset_name][model_name]["Insertion"][video_number][
+                frame_name
             ] = insertion_drise
-            metrics_results["D-RISE"][dataset_name][model_name]["Deletion"][image_number][
-                frame_number
+            metrics_results["D-RISE"][dataset_name][model_name]["Deletion"][video_number][
+                frame_name
             ] = deletion_drise
-            metrics_results["D-RISE"][dataset_name][model_name]["EPG"][image_number][frame_number] = (
+            metrics_results["D-RISE"][dataset_name][model_name]["EPG"][video_number][frame_name] = (
                 epg_drise
             )
-            metrics_results["D-RISE"][dataset_name][model_name]["Explanation Proportion"][image_number][
-                frame_number
+            metrics_results["D-RISE"][dataset_name][model_name]["Explanation Proportion"][video_number][
+                frame_name
             ] = exp_proportion_drise
-            metrics_results["D-RISE"][dataset_name][model_name]["Time"][image_number][frame_number] = (
+            metrics_results["D-RISE"][dataset_name][model_name]["Time"][video_number][frame_name] = (
                 time_drise
             )
-            metrics_results["Incx"][dataset_name][model_name]["Insertion"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Insertion"][video_number][frame_name] = (
                 insertion_incx
             )
-            metrics_results["Incx"][dataset_name][model_name]["Deletion"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Deletion"][video_number][frame_name] = (
                 deletion_incx
             )
-            metrics_results["Incx"][dataset_name][model_name]["EPG"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["EPG"][video_number][frame_name] = (
                 epg_incx
             )
-            metrics_results["Incx"][dataset_name][model_name]["Explanation Proportion"][image_number][
-                frame_number
+            metrics_results["Incx"][dataset_name][model_name]["Explanation Proportion"][video_number][
+                frame_name
             ] = exp_proportion_incx
-            metrics_results["Incx"][dataset_name][model_name]["Time"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Time"][video_number][frame_name] = (
                 time_incx
             )
             joblib.dump(metrics_results, "metrics_results.pkl")
