@@ -15,7 +15,8 @@ from incx.models.model_factory import ModelFactory
 from PIL import Image
 import os
 from dotenv import load_dotenv
-
+def default_float_dict():
+    return defaultdict(float)
 
 def main():
     load_dotenv()
