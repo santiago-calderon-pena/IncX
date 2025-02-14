@@ -41,7 +41,8 @@ def main():
         dict_incx = joblib.load(INCX_RESULTS_FOLDER_PATH + '/' + blob_name)
         dict_drise = joblib.load(D_RISE_RESULTS_FOLDER_PATH + '/' + blob_name)
 
-        model_name = blob_name.split("/")[1]
+        dataset_name = blob_name.split("/")[0]
+        model_name = blob_name.split("/")[2]
         current_index = dict_incx["detection"]["current_index"]
         class_index = dict_incx["detection"]["class_index"]
         saliency_map_incx = dict_incx["maps"]["saliency_map"]
@@ -49,8 +50,9 @@ def main():
         model_enum_el = ModelEnum[model_name]
         model = model_factory.get_model(model_enum_el)
         frame_number = int(blob_name.split("/")[-1].split(".")[0])
-        video_number = blob_name.split("/")[-2]
-        image_path = f"../../datasets/LASOT/{video_number}/{str(frame_number).zfill(8)}.jpg"
+        image_path = f"datasets/{blob_name.split('.')[0]}"
+        image_path = image_path + ".png" if os.path.exists(image_path + ".png") else image_path + ".jpg"
+        print(image_path)
         image = np.array(Image.open(image_path))
         bounding_box = dict_drise["detection"]["bounding_box"]
 
@@ -110,34 +112,34 @@ def main():
         image_number = int(blob_name.split("/")[-2]) - 1
         with lock_comparison:
             metrics_results = joblib.load("metrics_results.pkl")
-            metrics_results["D-RISE"][model_name]["Insertion"][image_number][
+            metrics_results["D-RISE"][dataset_name][model_name]["Insertion"][image_number][
                 frame_number
             ] = insertion_drise
-            metrics_results["D-RISE"][model_name]["Deletion"][image_number][
+            metrics_results["D-RISE"][dataset_name][model_name]["Deletion"][image_number][
                 frame_number
             ] = deletion_drise
-            metrics_results["D-RISE"][model_name]["EPG"][image_number][frame_number] = (
+            metrics_results["D-RISE"][dataset_name][model_name]["EPG"][image_number][frame_number] = (
                 epg_drise
             )
-            metrics_results["D-RISE"][model_name]["Explanation Proportion"][image_number][
+            metrics_results["D-RISE"][dataset_name][model_name]["Explanation Proportion"][image_number][
                 frame_number
             ] = exp_proportion_drise
-            metrics_results["D-RISE"][model_name]["Time"][image_number][frame_number] = (
+            metrics_results["D-RISE"][dataset_name][model_name]["Time"][image_number][frame_number] = (
                 time_drise
             )
-            metrics_results["Incx"][model_name]["Insertion"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Insertion"][image_number][frame_number] = (
                 insertion_incx
             )
-            metrics_results["Incx"][model_name]["Deletion"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Deletion"][image_number][frame_number] = (
                 deletion_incx
             )
-            metrics_results["Incx"][model_name]["EPG"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["EPG"][image_number][frame_number] = (
                 epg_incx
             )
-            metrics_results["Incx"][model_name]["Explanation Proportion"][image_number][
+            metrics_results["Incx"][dataset_name][model_name]["Explanation Proportion"][image_number][
                 frame_number
             ] = exp_proportion_incx
-            metrics_results["Incx"][model_name]["Time"][image_number][frame_number] = (
+            metrics_results["Incx"][dataset_name][model_name]["Time"][image_number][frame_number] = (
                 time_incx
             )
             joblib.dump(metrics_results, "metrics_results.pkl")
@@ -155,6 +157,7 @@ def main():
         with lock_blobs_name_comparison:
             blob_names_incx = joblib.load("blob_names_metrics.pkl")
         random.shuffle(blob_names_incx)
+        print(f"Missing: {len(blob_names_incx)}")
 
 if __name__ == "__main__":
     main()

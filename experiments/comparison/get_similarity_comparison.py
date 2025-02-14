@@ -50,7 +50,7 @@ def main():
         # Download and load blob data for INCX
         dict_incx = joblib.load(INCX_RESULTS_FOLDER_PATH +'/'+blob_name)
         model_name = blob_name.split("/")[2]
-        dataset_name = blob_name.split("/")[1]
+        dataset_name = blob_name.split("/")[0]
         print(f"Model: {model_name}, Dataset: {dataset_name}")
         # Download and load blob data for DRISE
         dict_drise = joblib.load(D_RISE_RESULTS_FOLDER_PATH +'/'+blob_name)
@@ -99,6 +99,7 @@ def main():
         with lock_blobs_name_comparison:
             blob_names_incx = joblib.load("blob_names.pkl")
         random.shuffle(blob_names_incx)
+        print(f"Missing: {len(blob_names_incx)}")
 
 
 if __name__ == "__main__":
