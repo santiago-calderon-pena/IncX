@@ -1,10 +1,12 @@
 import os
 import random
 import joblib
-from azure.storage.blob import BlobServiceClient
 from dotenv import load_dotenv
 from incx.models.model_enum import ModelEnum
-
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+from datasets.dataset_enum import DatasetEnum
+import numpy as np
 
 def find_files(directory="."):
     file_list = []
@@ -29,54 +31,28 @@ def main():
 
     joblib.dump(blob_names, "blob_names_metrics.pkl")
 
-    import numpy as np
-
     results = {
         "D-RISE": {
-            ModelEnum.YOLO.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
-            ModelEnum.RT_DETR.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
-            ModelEnum.FASTER_RCNN.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
+            dataset.name:{
+                model.name: {
+                    "Insertion": np.zeros((10, 300)),
+                    "Deletion": np.zeros((10, 300)),
+                    "EPG": np.zeros((10, 300)),
+                    "Explanation Proportion": np.zeros((10, 300)),
+                    "Time": np.zeros((10, 300)),
+                } for model in ModelEnum
+            } for dataset in DatasetEnum
         },
         "Incx": {
-            ModelEnum.YOLO.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
-            ModelEnum.RT_DETR.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
-            ModelEnum.FASTER_RCNN.name: {
-                "Insertion": np.zeros((10, 300)),
-                "Deletion": np.zeros((10, 300)),
-                "EPG": np.zeros((10, 300)),
-                "Explanation Proportion": np.zeros((10, 300)),
-                "Time": np.zeros((10, 300)),
-            },
+            dataset.name:{
+                model.name: {
+                    "Insertion": np.zeros((10, 300)),
+                    "Deletion": np.zeros((10, 300)),
+                    "EPG": np.zeros((10, 300)),
+                    "Explanation Proportion": np.zeros((10, 300)),
+                    "Time": np.zeros((10, 300)),
+                } for model in ModelEnum
+            } for dataset in DatasetEnum
         },
     }
     joblib.dump(results, "metrics_results.pkl")
