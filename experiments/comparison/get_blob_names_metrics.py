@@ -24,7 +24,7 @@ def main():
     load_dotenv()
     INCX_RESULTS_FOLDER_PATH = os.environ.get("INCX_RESULTS_FOLDER_PATH")
     
-    blob_names = find_files(INCX_RESULTS_FOLDER_PATH)
+    blob_names = find_files(INCX_RESULTS_FOLDER_PATH + '/NUSCENES')
     
     blob_names = [blob_name.replace("\\", "/") for blob_name in blob_names]
     blob_names = [
@@ -36,31 +36,31 @@ def main():
     joblib.dump(blob_names, "blob_names_metrics.pkl")
 
     
-    results = {
-        "D-RISE": {
-            dataset.name:{
-                model.name: {
-                    "Insertion": defaultdict(default_float_dict),
-                    "Deletion": defaultdict(default_float_dict),
-                    "EPG": defaultdict(default_float_dict),
-                    "Explanation Proportion": defaultdict(default_float_dict),
-                    "Time": defaultdict(default_float_dict),
-                } for model in ModelEnum
-            } for dataset in DatasetEnum
-        },
-        "Incx": {
-            dataset.name:{
-                model.name: {
-                    "Insertion": defaultdict(default_float_dict),
-                    "Deletion": defaultdict(default_float_dict),
-                    "EPG": defaultdict(default_float_dict),
-                    "Explanation Proportion": defaultdict(default_float_dict),
-                    "Time": defaultdict(default_float_dict),
-                } for model in ModelEnum
-            } for dataset in DatasetEnum
-        },
-    }
-    joblib.dump(results, "metrics_results.pkl")
+    # results = {
+    #     "D-RISE": {
+    #         dataset.name:{
+    #             model.name: {
+    #                 "Insertion": defaultdict(default_float_dict),
+    #                 "Deletion": defaultdict(default_float_dict),
+    #                 "EPG": defaultdict(default_float_dict),
+    #                 "Explanation Proportion": defaultdict(default_float_dict),
+    #                 "Time": defaultdict(default_float_dict),
+    #             } for model in ModelEnum
+    #         } for dataset in DatasetEnum
+    #     },
+    #     "Incx": {
+    #         dataset.name:{
+    #             model.name: {
+    #                 "Insertion": defaultdict(default_float_dict),
+    #                 "Deletion": defaultdict(default_float_dict),
+    #                 "EPG": defaultdict(default_float_dict),
+    #                 "Explanation Proportion": defaultdict(default_float_dict),
+    #                 "Time": defaultdict(default_float_dict),
+    #             } for model in ModelEnum
+    #         } for dataset in DatasetEnum
+    #     },
+    # }
+    # joblib.dump(results, "metrics_results.pkl")
 
     print(
         "Blob names have been saved to 'blob_names_metrics.pkl and comparison results array has been initialized 'metrics_results.pkl'."
