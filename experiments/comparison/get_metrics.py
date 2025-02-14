@@ -43,6 +43,8 @@ def main():
 
         dataset_name = blob_name.split("/")[0]
         model_name = blob_name.split("/")[2]
+        video_number = blob_name.split("/")[3]
+        image_name = blob_name.split("/")[4].split(".")[0]
         current_index = dict_incx["detection"]["current_index"]
         class_index = dict_incx["detection"]["class_index"]
         saliency_map_incx = dict_incx["maps"]["saliency_map"]
@@ -50,9 +52,9 @@ def main():
         model_enum_el = ModelEnum[model_name]
         model = model_factory.get_model(model_enum_el)
         frame_number = int(blob_name.split("/")[-1].split(".")[0])
-        image_path = f"datasets/{blob_name.split('.')[0]}"
-        image_path = image_path + ".png" if os.path.exists(image_path + ".png") else image_path + ".jpg"
+        image_path = f"datasets/{dataset_name}/{video_number}/{image_name}"
         print(image_path)
+        image_path = image_path + ".png" if os.path.exists(image_path + ".png") else image_path + ".jpg"
         image = np.array(Image.open(image_path))
         bounding_box = dict_drise["detection"]["bounding_box"]
 

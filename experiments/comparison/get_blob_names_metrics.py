@@ -7,6 +7,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from datasets.dataset_enum import DatasetEnum
 import numpy as np
+from collections import defaultdict
 
 def find_files(directory="."):
     file_list = []
@@ -35,22 +36,22 @@ def main():
         "D-RISE": {
             dataset.name:{
                 model.name: {
-                    "Insertion": np.zeros((10, 300)),
-                    "Deletion": np.zeros((10, 300)),
-                    "EPG": np.zeros((10, 300)),
-                    "Explanation Proportion": np.zeros((10, 300)),
-                    "Time": np.zeros((10, 300)),
+                    "Insertion": defaultdict(lambda: defaultdict(float)),
+                    "Deletion": defaultdict(lambda: defaultdict(float)),
+                    "EPG": defaultdict(lambda: defaultdict(float)),
+                    "Explanation Proportion": defaultdict(lambda: defaultdict(float)),
+                    "Time": defaultdict(lambda: defaultdict(float)),
                 } for model in ModelEnum
             } for dataset in DatasetEnum
         },
         "Incx": {
             dataset.name:{
                 model.name: {
-                    "Insertion": np.zeros((10, 300)),
-                    "Deletion": np.zeros((10, 300)),
-                    "EPG": np.zeros((10, 300)),
-                    "Explanation Proportion": np.zeros((10, 300)),
-                    "Time": np.zeros((10, 300)),
+                    "Insertion": defaultdict(lambda: defaultdict(float)),
+                    "Deletion": defaultdict(lambda: defaultdict(float)),
+                    "EPG": defaultdict(lambda: defaultdict(float)),
+                    "Explanation Proportion": defaultdict(lambda: defaultdict(float)),
+                    "Time": defaultdict(lambda: defaultdict(float)),
                 } for model in ModelEnum
             } for dataset in DatasetEnum
         },
